@@ -128,7 +128,7 @@ PennyPlan позволяет пользователям:
 
 1. **Клонируйте репозиторий**:
   ```bash
-  git clone https://github.com/Enyoku/PennyPlan \
+  git clone https://github.com/Enyoku/PennyPlan
   cd PennyPlan
 2. **Настройте переменные окружения**:
   Создайте файл **.env** в корне проекта и добавьте необходимые переменные:
