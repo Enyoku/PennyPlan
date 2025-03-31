@@ -150,15 +150,18 @@ PennyPlan позволяет пользователям:
 
   # Секретный ключ для подписи JWT
   SECRET_KEY=your_secret_key       # Секретный ключ для подписи JWT
+  ```
 
 3. **Запустите контейнеры с помощью Docker Compose**:
   ```bash
   docker-compose up --build
+  ```
 
 4. **Примените миграции**:
   ```bash
   docker exec -it auth_service python manage.py migrate 
   docker exec -it finance_service python manage.py migrate
+  ```
 
 5. **Откройте приложение**:
 
@@ -174,6 +177,7 @@ PennyPlan позволяет пользователям:
 
 2. **Примените манифесты**:
   ```bash
+  ```
 
 3. **Проверьте статус**:
 
