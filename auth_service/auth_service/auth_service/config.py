@@ -1,4 +1,5 @@
 import environ
+from pathlib import Path
 
 class Config:
     _instance = None
@@ -9,7 +10,16 @@ class Config:
             return cls._instance
     
     def __init__(self):
+        # Определяем путь к .env файлу
+        base_dir = Path(__file__).resolve().parent.parent # Корень проекта
+        env_file = base_dir / ".env"
+
         self.env = environ.Env()
+        if env_file.exists():
+            environ.Env.read_env(env_file)
+        else:
+            raise FileNotFoundError(f".env file not found at {env_file}")
+
         environ.Env.read_env() # Читаем переменные окружения из .env
         self.SECRET_KEY = self.env("SECRET_KEY")
         self.DB_NAME = self.env("DB_NAME")
