@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .repositories import UserRepo
 
 class UserService():
-    def __init__(self):
+    def __init__(self) -> None:
         self.repo: UserRepo = UserRepo()
 
     def authenticate(self, username: str, password: str) -> Optional[User]:
