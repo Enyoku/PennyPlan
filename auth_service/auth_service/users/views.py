@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auth_service import settings
@@ -45,7 +46,7 @@ class LoginView(APIView):
                 max_age=settings.SIMPLE_JWT["ACCESS_TOKEN_LIFETIME"].total_seconds(),
             )
             response.set_cookie(
-                key=settings.SIMPLE_JWT["AUTH_COOKIE"],
+                key=settings.SIMPLE_JWT["AUTH_COOKIE_REFRESH"],
                 value=refresh_token,
                 httponly=settings.SIMPLE_JWT["AUTH_COOKIE_HTTP_ONLY"],
                 secure=settings.SIMPLE_JWT["AUTH_COOKIE_SECURE"],
@@ -59,15 +60,20 @@ class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request: APIView) -> Response:
+        if not request.user.is_authenticated:
+            raise AuthenticationFailed("Authentication credentials were not provided.")
         user: User = request.user
         return Response(UserSerializer(user).data)
     
     def patch(self, request: APIView) -> Response:
         user: User = request.user
-        data: Dict[str, Any] = request.data
-        service: UserService = UserService()
-        updated_user: User = service.update_profile(user, **data)
-        return Response(UserSerializer(updated_user).data)
+        serializer: UserSerializer = UserSerializer(user, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
     def post(self, request: APIView) -> Response:
