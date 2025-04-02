@@ -1,5 +1,7 @@
-import environ
 from pathlib import Path
+
+import environ
+
 
 class Config:
     _instance = None
@@ -8,7 +10,7 @@ class Config:
         if not cls._instance:
             cls._instance = super(Config, cls).__new__(cls, *args, **kwargs)
             return cls._instance
-    
+
     def __init__(self):
         # Определяем путь к .env файлу
         base_dir = Path(__file__).resolve().parent.parent # Корень проекта

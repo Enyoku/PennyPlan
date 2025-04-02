@@ -1,8 +1,9 @@
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
 from django.contrib.auth.models import User
 
 from .repositories import UserRepo
+
 
 class UserService():
     def __init__(self) -> None:
@@ -13,9 +14,9 @@ class UserService():
         if user and user.check_password(password):  # Теперь user — экземпляр модели
             return user
         return None
-    
+
     def register(self, username: str, password: str) -> User:
         return self.repo.create_user(username, password)
-    
+
     def update_profile(self, user: User, **kwargs: Dict[str, Any]) -> User:
         return self.repo.update_user(user, **kwargs)

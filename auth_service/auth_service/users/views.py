@@ -1,18 +1,17 @@
-from typing import Optional, Dict, Any
+from typing import Optional
 
 from django.contrib.auth.models import User
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from auth_service import settings
 
-from .services import UserService
 from .serializers import UserSerializer
+from .services import UserService
 
 
 class RegisterView(APIView):
@@ -64,15 +63,15 @@ class ProfileView(APIView):
             raise AuthenticationFailed("Authentication credentials were not provided.")
         user: User = request.user
         return Response(UserSerializer(user).data)
-    
+
     def patch(self, request: APIView) -> Response:
         user: User = request.user
         serializer: UserSerializer = UserSerializer(user, data=request.data, partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
