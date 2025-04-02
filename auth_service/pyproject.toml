@@ -1,0 +1,13 @@
+[tool.black]
+line-length = 120
+target-version = ["py37"]
+skip-string-normalization = true
+
+[tool.isort]
+profile = "black"
+known_third_party = ["django", "requests"]
+
+[tool.ruff]
+line-length = 120
+select = ["F", "E", "W", "B"]
+ignore = ["E203"]
