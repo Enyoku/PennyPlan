@@ -32,3 +32,18 @@ class UserSerializer(serializers.ModelSerializer):
             self.fail("unique_email", message="This username has already taken")
 
         return value
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value: str) -> str:
+        user = self.context["user"]
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is incorrect")
+        return value
+
+    def validate_new_passwordd(self, value: str) -> str:
+        if len(value) < 8:
+            raise serializers.ValidationError("New password must contain at least 8 characters")
+        return value

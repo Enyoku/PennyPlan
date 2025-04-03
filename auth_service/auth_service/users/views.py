@@ -1,5 +1,7 @@
 from typing import Optional
+from urllib import request
 
+from distlib.compat import Request
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -10,8 +12,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from auth_service import settings
 
-from .serializers import UserSerializer
+from .serializers import ChangePasswordSerializer, UserSerializer
 from .services import UserService
+from auth_service.auth_service.users import serializers
 
 
 class RegisterView(APIView):
@@ -79,6 +82,20 @@ class ProfileView(APIView):
         service: UserService = UserService()
         service.delete_profile(user)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def patch(self, request: APIView) -> Response:
+        user: User = request.user
+        serializer = ChangePasswordSerializer(data=request.data, context={"user": user})
+
+        if serializer.is_valid():
+            user.set_password(serializer.validatedd_data["new_password"])
+            user.save()
+            return Response({"detail": "password changed successfully"}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutView(APIView):
     def post(self, request: APIView) -> Response:
