@@ -19,4 +19,4 @@ class CookieJWTAuthentication(BaseAuthentication):
             user = User.objects.get(id=user_id)
             return user, validated_token
         except (InvalidToken, TokenError, User.DoesNotExist):
-            raise AuthenticationFailed("Invalid token or user not found.")
+            raise AuthenticationFailed("Invalid token or user not found.") from None
