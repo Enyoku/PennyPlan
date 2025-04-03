@@ -20,3 +20,6 @@ class UserService():
 
     def update_profile(self, user: User, **kwargs: Dict[str, Any]) -> User:
         return self.repo.update_user(user, **kwargs)
+
+    def delete_profile(self, user: User) -> None:
+        return self.repo.delete_user(user)

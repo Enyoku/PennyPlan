@@ -15,3 +15,6 @@ class UserRepo:
             setattr(user, key, value)
         user.save()
         return user
+
+    def delete_user(self, user: User) -> None:
+        user.delete()

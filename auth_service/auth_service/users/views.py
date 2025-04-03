@@ -74,6 +74,12 @@ class ProfileView(APIView):
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request: APIView) -> Response:
+        user: User = request.user
+        service: UserService = UserService()
+        service.delete_profile(user)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class LogoutView(APIView):
     def post(self, request: APIView) -> Response:
         response = Response({"msg": "Logout successful"})
