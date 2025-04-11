@@ -11,3 +11,8 @@ known_third_party = ["django", "requests"]
 line-length = 120
 select = ["F", "E", "W", "B"]
 ignore = ["E203"]
+
+[tool.pytest.ini_options]
+django_settings_module = "auth_service.settings"
+addopts = "--nomigrations"
+python_files = ["tests/*.py"]
